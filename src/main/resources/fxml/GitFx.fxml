@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.gitfx.controller.GitFxController">
+<AnchorPane fx:id="gitFX" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.gitfx.controller.GitFxController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="589.0" prefWidth="655.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -75,10 +76,23 @@
                 <Button id="setting" fx:id="gitsettings" mnemonicParsing="false" onAction="#onGitSettingsClicked" prefHeight="26.0" prefWidth="40.0" text="Settings" />
                   <MenuButton id="gitsync" fx:id="gitsync" mnemonicParsing="false" prefHeight="26.0" prefWidth="51.0" text="Sync">
                     <items>
-                      <MenuItem fx:id="syncEveryThing" mnemonicParsing="false" onAction="#syncEveryThingClicked" text="Sync Everything" />
+                      <MenuItem fx:id="gitSyncEveryThing" mnemonicParsing="false" onAction="#syncEveryThingClicked" text="Sync Everything" />
                       <MenuItem fx:id="gitSpecific" mnemonicParsing="false" onAction="#onGitParticularRepositoryClicked" text="Particular Repository" />
                     </items>
                   </MenuButton>
+                  <HBox>
+                     <children>
+                        <MenuButton fx:id="language" contentDisplay="CENTER" mnemonicParsing="false">
+                          <items>
+                              <CheckMenuItem fx:id="langArabic" mnemonicParsing="false" onAction="#onArabicSelectionClicked" text="العربية" />
+                              <CheckMenuItem fx:id="langEnglish" mnemonicParsing="false" onAction="#onEnglishSelectionClicked" text="English" />
+                          </items>
+                        </MenuButton>
+                     </children>
+                     <padding>
+                        <Insets left="80.0" />
+                     </padding>
+                  </HBox>
               </items>
                <effect>
                   <Lighting diffuseConstant="1.19" specularConstant="0.01" surfaceScale="2.81">

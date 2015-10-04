@@ -28,6 +28,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -40,6 +41,7 @@ import javafx.fxml.FXML;
 import javafx.event.EventHandler;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.AnchorPane;
@@ -56,12 +58,14 @@ public class GitFxController implements Initializable {
 
     Logger logger = LoggerFactory.getLogger(GitFxApp.class.getName());
 
+    @FXML 
+    private AnchorPane gitFX;
     @FXML
     private Button gitclone;
     @FXML
     private Button gitsettings;
     @FXML
-    private MenuItem gitSyncEverything;
+    private MenuItem gitSyncEveryThing ;
     @FXML
     private Button gitinit;
     @FXML
@@ -80,6 +84,18 @@ public class GitFxController implements Initializable {
     private AnchorPane treeContainer;
     @FXML
     private AnchorPane historyContainer;
+    @FXML 
+    private MenuButton    language;
+    @FXML
+    private CheckMenuItem   langArabic;
+    @FXML
+    private CheckMenuItem   langEnglish;
+    @FXML
+    private Tab             historyTab;
+    @FXML
+    private Tab             changesTab;
+    @FXML
+    private Tab             othersTab;
 
     private ProgressIndicator pi;
     private GitFxDialog dialog;
@@ -99,12 +115,17 @@ public class GitFxController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+       
+        
+        this.langEnglish.setSelected(true);
+        
         Font.loadFont(GitFxController.class.getResource("/fonts/fontawesome-webfont.ttf").toExternalForm(), 12);
         gitinit.setText('\uf04b' + "");
         gitopen.setText('\uf07c' + "");
         gitsettings.setText('\uf013' + "");
         gitsync.setText('\uf021' + "");
         gitclone.setText('\uf0c5' + "");
+        language.setText('\uf1ab' + "");
         RepositoryTree.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     TreeItem<String> selectedItem = (TreeItem<String>) newValue;
@@ -125,6 +146,21 @@ public class GitFxController implements Initializable {
      * 1) Applicaiton Initialize event
      * 2) Initialization of a New Repository
      */
+    
+    // Arabic Language selector Action
+    @FXML
+    public void onArabicSelectionClicked( ActionEvent e ) {
+            loadLanguage("ar");
+            // remove checked selection
+            this.langEnglish.setSelected(false);
+    }
+    // English Language Selector Action
+    @FXML
+    public void onEnglishSelectionClicked(ActionEvent e ) {
+            loadLanguage("en");
+            // remove checked selection
+            this.langArabic.setSelected(false);
+    }
 
     private void initializeTree() {
         RepositoryData metaData = GitFXGsonUtil.getRepositoryMetaData();
@@ -338,8 +374,33 @@ public class GitFxController implements Initializable {
             );
          }
         dialog.gitFxInformationListDialog(resourceBundle.getString("syncRepo"), resourceBundle.getString("repo"),null,list);
+    }
+    
+    // Change the language 
+    void loadLanguage(String lang) {
+        this.resourceBundle = new GitResourceBundle(new Locale(lang)).getBundle();
+        // change all windows orientation
+        // if lang is arabic, orientation right_to_left
+        if (lang.equals("ar")) {
+            //
+            logger.debug("Windows Orientation changed to: Right To Left" );
+            this.gitFX.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        }
         
-                
+        if (lang.equals("en")) {
+            logger.debug("Windows Orientation changed to: Left To Right" );
+            this.gitFX.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        }
+        // Toolbar
+        this.gitSyncEveryThing.setText(resourceBundle.getString("syncAll"));
+        // Menu Items
+        this.gitSpecific.setText(resourceBundle.getString("syncSpecific"));
+        this.langArabic.setText(resourceBundle.getString("langArabic"));
+        this.langEnglish.setText(resourceBundle.getString("langEnglish"));
+        // Selected Git Tabs
+        this.historyTab.setText(resourceBundle.getString("history"));
+        this.changesTab.setText(resourceBundle.getString("changes"));
+        this.othersTab.setText(resourceBundle.getString("others"));
     }
 
 }
